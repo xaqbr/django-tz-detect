@@ -11,6 +11,8 @@ from tz_detect.templatetags.tz_detect import tz_detect
 from tz_detect.utils import convert_header_name, offset_to_timezone
 from tz_detect.views import SetOffsetView
 
+from .defaults import TZ_SESSION_KEY
+
 
 class ViewTestCase(TestCase):
     def setUp(self):
@@ -26,8 +28,8 @@ class ViewTestCase(TestCase):
 
         response = SetOffsetView.as_view()(request)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("detected_tz", request.session)
-        self.assertIsInstance(request.session["detected_tz"], int)
+        self.assertIn(TZ_SESSION_KEY, request.session)
+        self.assertIsInstance(request.session[TZ_SESSION_KEY], int)
 
     def test_xhr_valid_timezone(self):
         timezone_name = "Europe/Amsterdam"
@@ -36,8 +38,8 @@ class ViewTestCase(TestCase):
 
         response = SetOffsetView.as_view()(request)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("detected_tz", request.session)
-        self.assertEqual(request.session["detected_tz"], timezone_name)
+        self.assertIn(TZ_SESSION_KEY, request.session)
+        self.assertEqual(request.session[TZ_SESSION_KEY], timezone_name)
 
     def test_xhr_bad_method(self):
         request = self.factory.get("/abc")
@@ -64,7 +66,7 @@ class ViewTestCase(TestCase):
         timezone_name = "Europe/Amsterdam"
         request = self.factory.post("/abc", {"timezone": timezone_name})
         self.add_session(request)
-        request.session["detected_tz"] = timezone_name
+        request.session[TZ_SESSION_KEY] = timezone_name
 
         get_response = lambda x: HttpResponse("")
         TimezoneMiddleware(get_response).process_request(request)

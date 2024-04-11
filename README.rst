@@ -94,7 +94,9 @@ Installation
                'tz_detect.middleware.TimezoneMiddleware',
            )
 
-7. (Optional) Configure the countries in which your app will be most commonly used:
+7. (Optional) Configure optional settings
+
+   Set the countries in which your app will be most commonly used:
 
    .. code-block:: python
 
@@ -103,6 +105,13 @@ Installation
        # app's most popular countries first.
        # Defaults to the top Internet using countries.
        TZ_DETECT_COUNTRIES = ('CN', 'US', 'IN', 'JP', 'BR', 'RU', 'DE', 'FR', 'GB')
+
+   Set the session key that will be used to store the detected timezone
+
+   .. code-block:: python
+
+       # Session key to use, defaults to "detected_tz"
+       TZ_SESSOIN_KEY = "my-session-key"
 
 Please see ``example`` application. This application is used to manually
 test the functionalities of this package. This also serves as a good
